@@ -91,7 +91,11 @@ document.getElementById("generateCode").addEventListener("click", () => {
         alert("拡張機能の名前を入力してください！");
         return;
     }
-
+    const extensionId = document.getElementById("extId").value.trim();
+    if (!extensionId) {
+        alert("拡張機能のIDを入力してください！");
+        return;
+    }
     const code = generateCode(extensionName);
     document.getElementById("output").textContent = code;
 });
@@ -121,7 +125,7 @@ const funcDefs = blocks.map(block => `
 class ${extensionName} {
     getInfo() {
         return {
-            id: "${extensionName}",
+            id: "${extensionId}",
             name: "${extensionName}",
             color1: "${color1}",
             color2: "${color2}",
