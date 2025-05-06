@@ -1,0 +1,89 @@
+/* 基本のスタイル */
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background-color: #f4f4f9;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+h2 {
+  color: #555;
+}
+
+/* フォーム部分のスタイル */
+div {
+  margin-bottom: 20px;
+}
+
+input, select, textarea {
+  padding: 10px;
+  margin: 5px 0;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+/* ボタンスタイル */
+button {
+  padding: 10px 20px;
+  margin: 5px 0;
+  cursor: pointer;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* リスト部分のスタイル */
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  padding: 8px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  margin: 5px 0;
+  border-radius: 4px;
+}
+
+button.delete {
+  background-color: red;
+  border-radius: 50%;
+  padding: 5px;
+  font-size: 14px;
+}
+
+button.edit {
+  background-color: #f0ad4e;
+  border-radius: 50%;
+  padding: 5px;
+  font-size: 14px;
+}
+
+/* 出力部分 */
+pre {
+  background-color: #333;
+  color: white;
+  padding: 20px;
+  border-radius: 4px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
