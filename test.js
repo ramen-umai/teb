@@ -110,18 +110,18 @@ function generateCode(extensionName, extensionId) {
                     }
                 }`).join(",\n");
 
-    // 関数定義を作成（引数が空なら args を使わない）
-    const funcDefs = blocks.map(block => {
-        const hasArgs = block.arguments.length > 0;
-        const funcHeader = `${block.id}(${hasArgs ? "args" : ""}) {`;
-        const argExtracts = hasArgs
-            ? block.arguments.map(arg => `const ${arg} = args.${arg};`).join("\n        ") + "\n        "
-            : "";
-        return `
+// 修正しました
+const funcDefs = blocks.map(block => {
+    const hasArgs = block.arguments.length > 0;
+    const funcHeader = hasArgs ? `${block.id}(args) {` : `${block.id}() {`;
+    const argExtracts = hasArgs
+        ? block.arguments.map(arg => `const ${arg} = args.${arg};`).join("\n        ") + "\n        "
+        : "";
+    return `
     ${funcHeader}
         ${argExtracts}${block.body}
     }`;
-    }).join("\n");
+}).join("\n");
 
     // 最終出力
     return `
