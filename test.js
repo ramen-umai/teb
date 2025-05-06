@@ -145,3 +145,11 @@ function clearForm() {
     document.getElementById("blockBody").value = "";
     document.getElementById("blockArguments").value = "";
 }
+
+// コピーボタン機能
+document.getElementById("copyCode").addEventListener("click", () => {
+    const code = document.getElementById("output").textContent;
+    navigator.clipboard.writeText(code).then(() => {
+        alert("コードをコピーしました！");
+    });
+});
