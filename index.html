@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TurboWarp Extension Builder - v0.5</title>
+  <title>TurboWarp Extension Builder</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <h1>TurboWarp Extension Builder - v0.5</h1>
+  <h1>TurboWarp Extension Builder</h1>
 
   <!-- ブロック設定フォーム -->
   <div>
@@ -38,11 +38,21 @@
     <button id="addBlock">ブロック追加</button><br><br>
   </div>
 
-<!-- 色指定 -->
-<h3>色設定</h3>
-<label for="color1">カラー1: </label><input type="color" id="color1" value="#5c73b7"><br>
-<label for="color2">カラー2: </label><input type="color" id="color2" value="#1122ff"><br>
-<label for="color3">カラー3: </label><input type="color" id="color3" value="#274642"><br>
+  <!-- 引数の型選択 -->
+  <h3>引数の型を選択</h3>
+  <label for="argumentType">引数の型: </label>
+  <select id="argumentType">
+    <option value="STRING">文字列 (STRING)</option>
+    <option value="NUMBER">数値 (NUMBER)</option>
+    <option value="BOOLEAN">真偽値 (BOOLEAN)</option>
+  </select>
+  <p id="argumentTypeMeaning"></p> <!-- 型の意味を表示 -->
+
+  <!-- 色指定 -->
+  <h3>色設定</h3>
+  <label for="color1">カラー1: </label><input type="color" id="color1" value="#5c73b7"><br>
+  <label for="color2">カラー2: </label><input type="color" id="color2" value="#1122ff"><br>
+  <label for="color3">カラー3: </label><input type="color" id="color3" value="#274642"><br>
 
   <!-- ブロックリスト -->
   <div>
