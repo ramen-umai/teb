@@ -1,3 +1,5 @@
+// test.js - TurboWarp Extension Builder v0.5
+
 let blocks = [];
 
 // ブロックを追加
@@ -7,17 +9,14 @@ document.getElementById("addBlock").addEventListener("click", () => {
     const blockType = document.getElementById("blockType").value;
     const blockBody = document.getElementById("blockBody").value.trim();
 
-    // 引数を , 区切りで取得
     const argumentField = document.getElementById("blockArguments");
     const argumentList = argumentField.value.split(",").map(a => a.trim()).filter(a => a);
 
-    // 入力チェック
     if (!blockId || !blockText || !blockBody) {
         alert("ID、テキスト、関数内容をすべて入力してください！");
         return;
     }
 
-    // IDの重複チェック
     if (blocks.some(block => block.id === blockId)) {
         alert("そのIDはすでに使われています！");
         return;
@@ -32,11 +31,10 @@ document.getElementById("addBlock").addEventListener("click", () => {
     };
 
     blocks.push(newBlock);
-    refreshBlockList(); // リストを更新
-    clearForm(); // 入力をリセット
+    refreshBlockList();
+    clearForm();
 });
 
-// ブロックリスト更新
 function refreshBlockList() {
     const list = document.getElementById("blockList");
     list.innerHTML = "";
@@ -45,7 +43,6 @@ function refreshBlockList() {
         const li = document.createElement("li");
         li.innerHTML = `[${block.text}] ${block.id}(${block.arguments.join(", ")}) (${block.type})`;
 
-        // 編集ボタン
         const editBtn = document.createElement("button");
         editBtn.textContent = "編集";
         editBtn.addEventListener("click", () => {
@@ -56,7 +53,6 @@ function refreshBlockList() {
 
             if (!newText || !newId || !newBody) return;
 
-            // 重複チェック（自分以外に同じIDがないか）
             if (blocks.some((b, i) => i !== index && b.id === newId)) {
                 alert("そのIDはすでに使われています！");
                 return;
@@ -70,7 +66,6 @@ function refreshBlockList() {
             refreshBlockList();
         });
 
-        // 削除ボタン
         const deleteBtn = document.createElement("button");
         deleteBtn.textContent = "削除";
         deleteBtn.addEventListener("click", () => {
@@ -84,7 +79,6 @@ function refreshBlockList() {
     });
 }
 
-// コード生成
 document.getElementById("generateCode").addEventListener("click", () => {
     const extensionName = document.getElementById("extName").value.trim();
     if (!extensionName) {
@@ -96,11 +90,11 @@ document.getElementById("generateCode").addEventListener("click", () => {
         alert("拡張機能のIDを入力してください！");
         return;
     }
-    const code = generateCode(extensionName);
+    const code = generateCode(extensionName, extensionId);
     document.getElementById("output").textContent = code;
 });
 
-function generateCode(extensionName) {
+function generateCode(extensionName, extensionId) {
     const color1 = document.getElementById("color1").value;
     const color2 = document.getElementById("color2").value;
     const color3 = document.getElementById("color3").value;
@@ -115,11 +109,11 @@ function generateCode(extensionName) {
                     }
                 }`).join(",\n");
 
-const funcDefs = blocks.map(block => `
+    const funcDefs = blocks.map(block => `
     ${block.id}(args) {
+        ${block.arguments.map(arg => `const ${arg} = args.${arg};`).join("\n        ")}
         ${block.body}
     }`).join("\n");
-
 
     return `
 class ${extensionName} {
@@ -143,7 +137,6 @@ Scratch.extensions.register(new ${extensionName}());
 `.trim();
 }
 
-// 入力フォームをクリア
 function clearForm() {
     document.getElementById("blockId").value = "";
     document.getElementById("blockText").value = "";
@@ -151,7 +144,6 @@ function clearForm() {
     document.getElementById("blockArguments").value = "";
 }
 
-// コピーボタン機能
 document.getElementById("copyCode").addEventListener("click", () => {
     const code = document.getElementById("output").textContent;
     navigator.clipboard.writeText(code).then(() => {
