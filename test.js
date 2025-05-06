@@ -135,16 +135,21 @@ document.getElementById("generateCode").addEventListener("click", () => {
     document.getElementById("output").textContent = generatedCode;
 });
 
-// コード生成
 function generateCode(extensionName) {
     const blockDefs = blocks.map(block => `
-        { opcode: "${block.id}", blockType: Scratch.BlockType.${block.type}, text: "${block.text}" }`).join(",\n");
+        {
+            opcode: "${block.id}",
+            blockType: Scratch.BlockType.${block.type},
+            text: "${block.text}",
+            arguments: {
+                ${block.arguments.map(arg => `${arg}: { type: "string", defaultValue: "" }`).join(",\n                ")}
+            }
+        }`).join(",\n");
 
     const funcDefs = blocks.map(block => `
-        ${block.id}() {
-            // 関数本体（JSコード）
-            ${block.body}
-        }`).join("\n");
+    ${block.id}(${block.arguments.join(", ")}) {
+        ${block.body}
+    }`).join("\n");
 
     return `
 class ${extensionName} {
@@ -152,7 +157,9 @@ class ${extensionName} {
         return {
             id: "${extensionName}",
             name: "${extensionName}",
-            blocks: [${blockDefs}]
+            blocks: [
+                ${blockDefs}
+            ]
         };
     }
 
@@ -162,3 +169,4 @@ ${funcDefs}
 Scratch.extensions.register(new ${extensionName}());
 `.trim();
 }
+
