@@ -99,29 +99,52 @@ function generateCode(extensionName, extensionId) {
     const color2 = document.getElementById("color2").value;
     const color3 = document.getElementById("color3").value;
 
-    // ブロック定義を作成
-    const blockDefs = blocks.map(block => `
+    const blockDefs = blocks.map(block => {
+        const hasArgs = block.arguments.length > 0;
+        const argumentsObj = hasArgs
+            ? `arguments: {\n${block.arguments.map(arg => `                        ${arg}: { type: Scratch.ArgumentType.STRING, defaultValue: "" }`).join(",\n")}\n                    },`
+            : "";
+        return `
                 {
                     opcode: "${block.id}",
                     blockType: Scratch.BlockType.${block.type},
                     text: "${block.text}",
-                    arguments: {
-                        ${block.arguments.map(arg => `${arg}: { type: Scratch.ArgumentType.STRING, defaultValue: "" }`).join(",\n                        ")}
-                    }
-                }`).join(",\n");
+                    ${argumentsObj}
+                }`;
+    }).join(",\n");
 
-// 修正しました
-const funcDefs = blocks.map(block => {
-    const hasArgs = block.arguments.length > 0;
-    const funcHeader = hasArgs ? `${block.id}(args) {` : `${block.id}() {`;
-    const argExtracts = hasArgs
-        ? block.arguments.map(arg => `const ${arg} = args.${arg};`).join("\n        ") + "\n        "
-        : "";
-    return `
-    ${funcHeader}
-        ${argExtracts}${block.body}
+    const funcDefs = blocks.map(block => {
+        const hasArgs = block.arguments.length > 0;
+        const funcHeader = hasArgs ? `${block.id}(args)` : `${block.id}()`;
+        const argLines = hasArgs
+            ? block.arguments.map(arg => `const ${arg} = args.${arg};`).join("\n        ") + "\n        "
+            : "";
+        return `
+    ${funcHeader} {
+        ${argLines}${block.body}
     }`;
-}).join("\n");
+    }).join("\n");
+
+    return `
+class ${extensionName} {
+    getInfo() {
+        return {
+            id: "${extensionId}",
+            name: "${extensionName}",
+            color1: "${color1}",
+            color2: "${color2}",
+            color3: "${color3}",
+            blocks: [
+${blockDefs}
+            ]
+        };
+    }
+${funcDefs}
+}
+
+Scratch.extensions.register(new ${extensionName}());
+`.trim();
+}
 
     // 最終出力
     return `
