@@ -1,134 +1,157 @@
-// グローバル変数にブロックのリストを保持
 let blocks = [];
 
-// ブロック追加ボタンのイベントリスナー
+// 引数用の入力欄を管理するための変数
+let argumentCounter = 0;
+
+// ブロックを追加
 document.getElementById("addBlock").addEventListener("click", () => {
-  // ユーザーからブロックのID、テキスト、JSコードを入力してもらう
-  const blockId = prompt("ブロックのID（関数名）を入力");
-  const blockText = prompt("ブロックのテキストを入力");
-  const blockBody = prompt("ブロックのJSコードを入力");
+    const blockId = document.getElementById("blockId").value.trim();
+    const blockText = document.getElementById("blockText").value.trim();
+    const blockType = document.getElementById("blockType").value;
+    const blockBody = document.getElementById("blockBody").value.trim();
 
-  const trimmedId = blockId.trim();
-
-  // ID重複チェック
-  const idExists = blocks.some(b => b.id === trimmedId);
-  if (idExists) {
-    alert("そのIDはすでに使われています！");
-    return;
-  }
-
-  // 新しいブロックの追加
-  const newBlock = {
-    id: trimmedId,
-    text: blockText.trim(),
-    body: blockBody.trim(),
-    arguments: [] // 引数を初期化
-  };
-
-  blocks.push(newBlock);
-  refreshBlockList();  // ブロックリストを再表示
-});
-
-// 引数を追加するボタンのイベントリスナー
-document.getElementById("addArgument").addEventListener("click", () => {
-  const argName = prompt("引数の名前を入力");
-  const argType = prompt("引数の型を入力（例: STRING, NUMBER, COLOR）");
-
-  const blockId = document.getElementById("blockId").value.trim(); // 現在選ばれているIDを取得
-
-  if (!blockId) {
-    alert("IDを入力してください！");
-    return;
-  }
-
-  const block = blocks.find(b => b.id === blockId); // ブロックIDが一致するものを検索
-
-  if (!block) {
-    alert(`ID "${blockId}" のブロックが見つかりません！`);
-    return;
-  }
-
-  // 引数を追加
-  block.arguments.push({ name: argName, type: argType.toUpperCase() });
-
-  refreshBlockList(); // 引数を追加した後にブロックリストを再表示
-});
-
-// ブロックリストの更新
-function refreshBlockList() {
-  const list = document.getElementById("blockList");
-  list.innerHTML = "";  // リストをクリア
-
-  blocks.forEach((block, index) => {
-    const li = document.createElement("li");
-    li.textContent = `[${block.type}] ${block.text} → ${block.id}()`;
-
-    // 引数があれば表示
-    if (block.arguments && block.arguments.length > 0) {
-      const argsText = block.arguments.map(arg => `${arg.name} (${arg.type})`).join(", ");
-      li.textContent += ` [Arguments: ${argsText}]`;
+    // 必須項目の確認
+    if (!blockId || !blockText || !blockBody) {
+        alert("ID、テキスト、関数内容をすべて入力してください！");
+        return;
     }
 
-    // 編集ボタン
-    const editBtn = document.createElement("button");
-    editBtn.classList.add("edit");
-    editBtn.textContent = "Edit";
-    editBtn.addEventListener("click", () => {
-      const newText = prompt("ブロックのテキストを変更", block.text);
-      const newId = prompt("ID（関数名）を変更", block.id);
-      const newBody = prompt("関数の処理（JSコード）を変更", block.body);
-
-      const trimmedId = newId.trim();
-
-      // 重複チェック
-      const idExists = blocks.some((b, i) => i !== index && b.id === trimmedId);
-      if (idExists) {
+    // IDの重複チェック
+    if (blocks.some(block => block.id === blockId)) {
         alert("そのIDはすでに使われています！");
         return;
-      }
+    }
 
-      block.text = newText.trim();
-      block.id = trimmedId;
-      block.opcode = trimmedId;
-      block.body = newBody.trim();
+    const newBlock = {
+        id: blockId,
+        text: blockText,
+        type: blockType,
+        body: blockBody,
+        arguments: []  // 引数は後で追加
+    };
 
-      refreshBlockList();  // リスト再表示
+    blocks.push(newBlock);
+    refreshBlockList(); // リストを更新
+});
+
+// 引数を追加
+document.getElementById("addArgument").addEventListener("click", () => {
+    const blockId = document.getElementById("blockId").value.trim();
+
+    if (!blockId) {
+        alert("引数を追加するブロックIDを入力してください！");
+        return;
+    }
+
+    const block = blocks.find(b => b.id === blockId);
+    if (!block) {
+        alert(`ID "${blockId}" のブロックが見つかりません！`);
+        return;
+    }
+
+    // 新しい引数のための入力欄を作成
+    const argumentInput = document.createElement("input");
+    argumentInput.type = "text";
+    argumentInput.placeholder = `引数${++argumentCounter}`;
+    argumentInput.id = `argumentInput${argumentCounter}`;
+
+    const addArgumentButton = document.createElement("button");
+    addArgumentButton.textContent = "引数追加";
+    addArgumentButton.addEventListener("click", () => {
+        const argumentValue = document.getElementById(`argumentInput${argumentCounter}`).value.trim();
+        if (argumentValue) {
+            block.arguments.push(argumentValue);  // 引数を追加
+            refreshBlockList();  // リストを再表示
+        }
     });
 
-    // 削除ボタン
-    const deleteBtn = document.createElement("button");
-    deleteBtn.classList.add("delete");
-    deleteBtn.textContent = "Delete";
-    deleteBtn.addEventListener("click", () => {
-      blocks.splice(index, 1);
-      refreshBlockList();  // リスト再表示
-    });
+    // 引数入力欄を表示
+    const argumentsContainer = document.createElement("div");
+    argumentsContainer.appendChild(argumentInput);
+    argumentsContainer.appendChild(addArgumentButton);
+    document.body.appendChild(argumentsContainer);
+});
 
-    li.appendChild(editBtn);
-    li.appendChild(deleteBtn);
-    list.appendChild(li);
-  });
+// ブロックリストを更新
+function refreshBlockList() {
+    const list = document.getElementById("blockList");
+    list.innerHTML = ""; // 既存のリストをクリア
+
+    blocks.forEach((block, index) => {
+        const li = document.createElement("li");
+
+        // ブロックの表示
+        li.innerHTML = `[${block.text}] ${block.id}() (${block.type})`;
+
+        // 引数を表示
+        if (block.arguments.length > 0) {
+            li.innerHTML += ` - 引数: ${block.arguments.join(", ")}`;
+        }
+
+        // 編集ボタン
+        const editBtn = document.createElement("button");
+        editBtn.textContent = "編集";
+        editBtn.addEventListener("click", () => {
+            const newText = prompt("ブロックのテキストを変更", block.text);
+            const newId = prompt("ID（関数名）を変更", block.id);
+            const newBody = prompt("関数の処理（JSコード）を変更", block.body);
+
+            // 重複チェック
+            if (blocks.some((b, i) => i !== index && b.id === newId)) {
+                alert("そのIDはすでに使われています！");
+                return;
+            }
+
+            block.text = newText.trim();
+            block.id = newId.trim();
+            block.body = newBody.trim();
+
+            refreshBlockList();  // リストを再表示
+        });
+
+        // 削除ボタン
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "削除";
+        deleteBtn.addEventListener("click", () => {
+            blocks.splice(index, 1);  // ブロックを削除
+            refreshBlockList();  // リストを再表示
+        });
+
+        li.appendChild(editBtn);
+        li.appendChild(deleteBtn);
+        list.appendChild(li);
+    });
 }
 
+// コード生成ボタン
+document.getElementById("generateCode").addEventListener("click", () => {
+    const extensionName = document.getElementById("extName").value.trim();
+    if (!extensionName) {
+        alert("拡張機能の名前を入力してください！");
+        return;
+    }
+
+    const generatedCode = generateCode(extensionName);
+    document.getElementById("output").textContent = generatedCode;
+});
+
 // コード生成
-function generateCode() {
-  const name = "MyExtension"; // 拡張機能名（固定にしている場合）
-  
-  const blockDefs = blocks.map(block => `
-    { opcode: "${block.id}", blockType: Scratch.BlockType.REPORTER, text: "${block.text}" }`).join(",\n");
+function generateCode(extensionName) {
+    const blockDefs = blocks.map(block => `
+        { opcode: "${block.id}", blockType: Scratch.BlockType.${block.type}, text: "${block.text}" }`).join(",\n");
 
-  const funcDefs = blocks.map(block => `
-    ${block.id}() {
-        // 関数本体（JSコード）
-        ${block.body}
-    }`).join("\n");
+    const funcDefs = blocks.map(block => `
+        ${block.id}() {
+            // 関数本体（JSコード）
+            ${block.body}
+        }`).join("\n");
 
-  return `
-class ${name} {
+    return `
+class ${extensionName} {
     getInfo() {
         return {
-            id: "${name.toLowerCase()}",
-            name: "${name}",
+            id: "${extensionName}",
+            name: "${extensionName}",
             blocks: [${blockDefs}]
         };
     }
@@ -136,6 +159,6 @@ class ${name} {
 ${funcDefs}
 }
 
-Scratch.extensions.register(new ${name}());
+Scratch.extensions.register(new ${extensionName}());
 `.trim();
 }
