@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TurboWarp Extension Builder - v0.5</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <h1>TurboWarp Extension Builder - v0.5</h1>
 
-  <!-- ブロック設定フォーム -->
   <div>
     <h2>ブロック設定</h2>
+
     <label for="blockId">ID (関数名): </label>
-    <input type="text" id="blockId" placeholder="IDを入力" /><br>
+    <input type="text" id="blockId" placeholder="IDを入力"><br>
 
     <label for="blockText">テキスト: </label>
-    <input type="text" id="blockText" placeholder="ブロックのテキスト" /><br>
+    <input type="text" id="blockText" placeholder="ブロックのテキスト"><br>
 
     <label for="blockType">タイプ: </label>
     <select id="blockType">
@@ -28,26 +28,25 @@
       <option value="LABEL">LABEL</option>
     </select><br>
 
-    <label for="blockArguments">引数 (カンマ区切り): </label>
-    <input type="text" id="blockArguments" placeholder="引数を入力（例: a, b, c）" /><br>
-
-    <label for="blockBody">関数本体（JSコード）: </label>
+    <label for="blockBody">関数本体（JSコード）: </label><br>
     <textarea id="blockBody" rows="4" placeholder="関数の処理内容を入力"></textarea><br>
 
-    <button id="addBlock">ブロック追加</button><br><br>
+    <h3>引数</h3>
+    <div id="argumentsContainer"></div>
+    <button id="addArgument">引数追加</button><br><br>
+
+    <button id="addBlock">ブロック追加</button>
   </div>
 
-  <!-- ブロックリスト -->
   <div>
     <h2>作成したブロック</h2>
     <ul id="blockList"></ul>
   </div>
 
-  <!-- コード生成 -->
   <div>
     <h2>生成されるコード</h2>
     <label for="extName">拡張名: </label>
-    <input type="text" id="extName" placeholder="拡張機能の名前" /><br>
+    <input type="text" id="extName" placeholder="拡張機能の名前"><br>
     <button id="generateCode">コード生成</button><br>
     <pre id="output"></pre>
   </div>
