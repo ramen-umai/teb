@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TurboWarp Extension Builder - v0.5</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>TurboWarp Extension Builder - v0.5</h1>
+
+  <!-- ブロック設定フォーム -->
+  <div>
+    <h2>ブロック設定</h2>
+    <label for="blockId">ID (関数名): </label>
+    <input type="text" id="blockId" placeholder="IDを入力" /><br>
+
+    <label for="blockText">テキスト: </label>
+    <input type="text" id="blockText" placeholder="ブロックのテキスト" /><br>
+
+    <label for="blockType">タイプ: </label>
+    <select id="blockType">
+      <option value="COMMAND">COMMAND</option>
+      <option value="REPORTER">REPORTER</option>
+      <option value="BUTTON">BUTTON</option>
+      <option value="LOOP">LOOP</option>
+      <option value="BOOLEAN">BOOLEAN</option>
+      <option value="LABEL">LABEL</option>
+    </select><br>
+
+    <label for="blockBody">関数本体（JSコード）: </label>
+    <textarea id="blockBody" rows="4" placeholder="関数の処理内容を入力"></textarea><br>
+
+    <button id="addBlock">ブロック追加</button>
+    <button id="addArgument">引数追加</button><br><br>
+  </div>
+
+  <!-- ブロックリスト -->
+  <div>
+    <h2>作成したブロック</h2>
+    <ul id="blockList"></ul>
+  </div>
+
+  <!-- コード生成 -->
+  <div>
+    <h2>生成されるコード</h2>
+    <label for="extName">拡張名: </label>
+    <input type="text" id="extName" placeholder="拡張機能の名前" /><br>
+    <button id="generateCode">コード生成</button><br>
+    <pre id="output"></pre>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
