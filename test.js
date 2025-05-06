@@ -111,10 +111,11 @@ function generateCode(extensionName) {
                     }
                 }`).join(",\n");
 
-    const funcDefs = blocks.map(block => `
-    ${block.id}(${block.arguments.join(", ")}) {
+const funcDefs = blocks.map(block => `
+    ${block.id}(args) {
         ${block.body}
     }`).join("\n");
+
 
     return `
 class ${extensionName} {
