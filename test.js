@@ -99,6 +99,7 @@ function generateCode(extensionName, extensionId) {
     const color2 = document.getElementById("color2").value;
     const color3 = document.getElementById("color3").value;
 
+    // ブロック定義を作成
     const blockDefs = blocks.map(block => `
                 {
                     opcode: "${block.id}",
@@ -109,12 +110,20 @@ function generateCode(extensionName, extensionId) {
                     }
                 }`).join(",\n");
 
-    const funcDefs = blocks.map(block => `
-    ${block.id}(args) {
-        ${block.arguments.map(arg => `const ${arg} = args.${arg};`).join("\n        ")}
-        ${block.body}
-    }`).join("\n");
+    // 関数定義を作成（引数が空なら args を使わない）
+    const funcDefs = blocks.map(block => {
+        const hasArgs = block.arguments.length > 0;
+        const funcHeader = `${block.id}(${hasArgs ? "args" : ""}) {`;
+        const argExtracts = hasArgs
+            ? block.arguments.map(arg => `const ${arg} = args.${arg};`).join("\n        ") + "\n        "
+            : "";
+        return `
+    ${funcHeader}
+        ${argExtracts}${block.body}
+    }`;
+    }).join("\n");
 
+    // 最終出力
     return `
 class ${extensionName} {
     getInfo() {
@@ -129,13 +138,13 @@ ${blockDefs}
             ]
         };
     }
-
 ${funcDefs}
 }
 
 Scratch.extensions.register(new ${extensionName}());
 `.trim();
 }
+
 
 function clearForm() {
     document.getElementById("blockId").value = "";
