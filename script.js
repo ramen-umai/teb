@@ -8,9 +8,9 @@
       div.innerHTML = `
         <input type="text" placeholder="引数名">
         <select>
-          <option value="STRING">STRING - テキスト</option>
-          <option value="NUMBER">NUMBER - 数値</option>
-          <option value="BOOLEAN">BOOLEAN - 真偽値</option>
+          <option value="STRING">STRING - テキスト(appleなど)</option>
+          <option value="NUMBER">NUMBER - 数値(1,4など..)</option>
+          <option value="BOOLEAN">BOOLEAN - 真偽値(true,false)</option>
         </select>
         <button>削除</button>
       `;
@@ -71,7 +71,7 @@
     }`;
       }).join("\n\n");
 
-      const fullCode = `class ${name} {
+      const fullCode = `class ${id} {
     getInfo() {
         return {
             id: "${id}",
@@ -88,7 +88,7 @@ ${blockDefs}
 ${funcDefs}
 }
 
-Scratch.extensions.register(new ${name}());`;
+Scratch.extensions.register(new ${id}());`;
 
       document.getElementById("output").textContent = fullCode;
     });
@@ -96,5 +96,5 @@ Scratch.extensions.register(new ${name}());`;
     // コピーボタン
     document.getElementById("copyCode").addEventListener("click", () => {
       const code = document.getElementById("output").textContent;
-      navigator.clipboard.writeText(code).then(() => alert("コピーしました！"));
+      navigator.clipboard.writeText(code).then(() => console.log("コードをコピーしました"));
     });
