@@ -3,75 +3,55 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TurboWarp Extension Builder</title>
-  <link rel="stylesheet" href="styles.css" />
+  <title>TurboWarp Extension Builder - v0.6</title>
+  <style>
+    body { font-family: sans-serif; padding: 1em; }
+    .arg-row { margin-bottom: 0.5em; }
+    .arg-row input, .arg-row select { margin-right: 0.5em; }
+  </style>
 </head>
 <body>
-  <h1>TurboWarp Extension Builder</h1>
+  <h1>TurboWarp Extension Builder - v0.6</h1>
 
   <!-- ブロック設定フォーム -->
   <div>
     <h2>ブロック設定</h2>
+    <label>ID (関数名): <input type="text" id="blockId"></label><br>
+    <label>テキスト: <input type="text" id="blockText"></label><br>
+    <label>タイプ: 
+      <select id="blockType">
+        <option value="COMMAND">COMMAND - 実行するだけのブロック</option>
+        <option value="REPORTER">REPORTER - 値を返す</option>
+        <option value="BOOLEAN">BOOLEAN - 真偽値を返す</option>
+      </select>
+    </label><br>
 
-    <label for="blockId">ID (関数名): </label>
-    <input type="text" id="blockId" placeholder="IDを入力"><br>
+    <h3>引数設定</h3>
+    <div id="argumentsArea"></div>
+    <button id="addArg">引数を追加</button><br><br>
 
-    <label for="blockText">テキスト: </label>
-    <input type="text" id="blockText" placeholder="ブロックのテキスト"><br>
+    <label>関数の処理（JS）:<br>
+      <textarea id="blockBody" rows="4" cols="50"></textarea>
+    </label><br>
 
-    <label for="blockType">タイプ: </label>
-    <select id="blockType">
-      <option value="COMMAND">COMMAND</option>
-      <option value="REPORTER">REPORTER</option>
-      <option value="BUTTON">BUTTON</option>
-      <option value="LOOP">LOOP</option>
-      <option value="BOOLEAN">BOOLEAN</option>
-      <option value="LABEL">LABEL</option>
-    </select><br>
-
-    <label for="blockArguments">引数（カンマ区切り）: </label><br>
-    <input type="text" id="blockArguments" placeholder="例: a, b"><br>
-
-    <label for="blockBody">関数本体（JSコード）: </label><br>
-    <textarea id="blockBody" rows="4" placeholder="関数の処理内容を入力"></textarea><br>
-
-    <button id="addBlock">ブロック追加</button><br><br>
+    <button id="addBlock">ブロックを追加</button>
   </div>
 
-  <!-- 引数の型選択 -->
-  <h3>引数の型を選択</h3>
-  <label for="argumentType">引数の型: </label>
-  <select id="argumentType">
-    <option value="STRING">文字列 (STRING)</option>
-    <option value="NUMBER">数値 (NUMBER)</option>
-    <option value="BOOLEAN">真偽値 (BOOLEAN)</option>
-  </select>
-  <p id="argumentTypeMeaning"></p> <!-- 型の意味を表示 -->
-
-  <!-- 色指定 -->
   <h3>色設定</h3>
-  <label for="color1">カラー1: </label><input type="color" id="color1" value="#5c73b7"><br>
-  <label for="color2">カラー2: </label><input type="color" id="color2" value="#1122ff"><br>
-  <label for="color3">カラー3: </label><input type="color" id="color3" value="#274642"><br>
+  <label>カラー1: <input type="color" id="color1" value="#5c73b7"></label><br>
+  <label>カラー2: <input type="color" id="color2" value="#1122ff"></label><br>
+  <label>カラー3: <input type="color" id="color3" value="#274642"></label><br>
 
-  <!-- ブロックリスト -->
-  <div>
-    <h2>作成したブロック</h2>
-    <ul id="blockList"></ul>
-  </div>
+  <h2>作成したブロック</h2>
+  <ul id="blockList"></ul>
 
-  <!-- コード生成 -->
-  <div>
-    <h2>生成されるコード</h2>
-    <label for="extName">拡張機能名: </label>
-    <input type="text" id="extName" placeholder="拡張機能の名前"><br>
-    <label for="extId">ID名: </label>
-    <input type="text" id="extId" placeholder="拡張機能のID"><br>
-    <button id="generateCode">コード生成</button>
-    <button id="copyCode">コードをコピー</button>
-    <pre id="output"></pre>
-  </div>
-
+  <h2>コード生成</h2>
+  <label>拡張機能名: <input type="text" id="extName"></label><br>
+  <label>ID名: <input type="text" id="extId"></label><br>
+  <button id="generateCode">コード生成</button>
+  <button id="copyCode">コピー</button>
+  <pre id="output"></pre>
+  
   <script src="test.js"></script>
 </body>
 </html>
