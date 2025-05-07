@@ -7,6 +7,7 @@
       div.className = "arg-row";
       div.innerHTML = `
         <input type="text" placeholder="引数名">
+        <input type="text" placeholder="引数のデフォルト値">
         <select>
           <option value="STRING">STRING - テキスト(appleなど)</option>
           <option value="NUMBER">NUMBER - 数値(1,4など..)</option>
@@ -25,12 +26,15 @@
       const type = document.getElementById("blockType").value;
       const body = document.getElementById("blockBody").value;
 
-      const argsArea = document.getElementById("argumentsArea");
-      const args = Array.from(argsArea.children).map(div => {
-        const name = div.querySelector("input").value.trim();
-        const argType = div.querySelector("select").value;
-        return { name, type: argType };
-      }).filter(arg => arg.name);
+const argsArea = document.getElementById("argumentsArea");
+  const args = Array.from(argsArea.children).map(div => {
+  const inputs = div.querySelectorAll("input");
+  const name = inputs[0].value.trim();
+  const argDft = inputs[1].value;
+  const argType = div.querySelector("select").value;
+  return { name, type: argType, dft: argDft };
+}).filter(arg => arg.name);
+
 
       blocks.push({ id, text, type, body, args });
       renderBlockList();
@@ -59,7 +63,7 @@
           blockType: Scratch.BlockType.${block.type},
           text: "${block.text}",
           arguments: {
-              ${block.args.map(arg => `${arg.name}: { type: Scratch.ArgumentType.${arg.type}, defaultValue: "" }`).join(",\n              ")}
+              ${block.args.map(arg => `${arg.name}: { type: Scratch.ArgumentType.${arg.type}, defaultValue: "${arg.dft}" }`).join(",\n              ")}
           }
       }`).join(",\n");
 
