@@ -109,11 +109,12 @@ document.getElementById("copyCode").addEventListener("click", () => {
 });
 
   document.getElementById("extLoad").addEventListener("click", function () {
+    const file = document.getElementById("extName").value.trim();
     const code = document.getElementById("output").textContent;
     const blob = new Blob([code], { type: "text/javascript" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = `${extName}.js`; // テンプレートリテラルを使って変数を埋め込む
+    link.download = `${file}.js`; // テンプレートリテラルを使って変数を埋め込む
     link.click();
     URL.revokeObjectURL(link.href); // メモリ開放
   });
