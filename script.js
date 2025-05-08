@@ -63,7 +63,7 @@ const argsArea = document.getElementById("argumentsArea");
           blockType: Scratch.BlockType.${block.type},
           text: "${block.text}",
           arguments: {
-              ${block.args.map(arg => `${arg.name}: { type: Scratch.ArgumentType.${arg.type}, defaultValue: "${arg.dft}" }`).join(",\n              ")}
+              ${block.args.map(arg => `${arg.name}: { type: Scratch.ArgumentType.${arg.type}, defaultValue: ${arg.dft} }`).join(",\n              ")}
           }
       }`).join(",\n");
 
