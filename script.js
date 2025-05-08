@@ -107,3 +107,13 @@ document.getElementById("copyCode").addEventListener("click", () => {
   const code = document.getElementById("output").textContent;
   navigator.clipboard.writeText(code).then(() => console.log("コードをコピーしました"));
 });
+
+  document.getElementById("extLoad").addEventListener("click", function () {
+    const code = document.getElementById("output").textContent;
+    const blob = new Blob([code], { type: "text/javascript" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "extLoad_file.txt";
+    link.click();
+    URL.revokeObjectURL(link.href); // メモリ開放
+  });
