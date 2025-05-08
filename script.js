@@ -113,7 +113,7 @@ document.getElementById("copyCode").addEventListener("click", () => {
     const blob = new Blob([code], { type: "text/javascript" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = "extLoad_file.txt";
+    link.download = `${name}.js`; // テンプレートリテラルを使って変数を埋め込む
     link.click();
     URL.revokeObjectURL(link.href); // メモリ開放
   });
