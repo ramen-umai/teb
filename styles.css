@@ -87,3 +87,10 @@ pre {
   white-space: pre-wrap;
   word-wrap: break-word;
 }
+
+a {
+  color: black;
+  font-size: 14px;
+  font-weight: bold;
+  text-decoration: none;
+}
