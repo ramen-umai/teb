@@ -86,7 +86,7 @@ document.getElementById("generateCode").addEventListener("click", () => {
             color1: "${color1}",
             color2: "${color2}",
             color3: "${color3}",
-            docsURI: "${docs}",
+            ...(docs ? { docsURI: `${docs},` } : {})
             showStatusButton: true,
             blocks: [
 ${blockDefs}
